@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIRE Calculator</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            background-color: #f9fafb;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .dashboard {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .dashboard p {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 5px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>FIRE Calculator</h2>
+        <label for="monthlyExpense">Monthly Expense (₹):</label>
+        <input type="number" id="monthlyExpense" placeholder="Enter monthly expense">
+        
+        <label for="currentAge">Current Age:</label>
+        <input type="number" id="currentAge" placeholder="Enter current age">
+        
+        <label for="retirementAge">Retirement Age:</label>
+        <input type="number" id="retirementAge" placeholder="Enter retirement age">
+        
+        <label for="inflationRate">Assumed Inflation Rate (%):</label>
+        <input type="number" id="inflationRate" value="10" placeholder="Enter inflation rate">
+        
+        <label for="coastFireAge">Desired Coast FIRE Age:</label>
+        <input type="number" id="coastFireAge" placeholder="Enter Coast FIRE age">
+        
+        <button onclick="calculateFIRE()">Calculate FIRE</button>
+    </div>
+
+    <div class="dashboard">
+        <h3>Dashboard</h3>
+        <p id="expenseToday"></p>
+        <p id="expenseAtRetirement"></p>
+        <p id="leanFIRE"></p>
+        <p id="fire"></p>
+        <p id="fatFIRE"></p>
+        <p id="coastFIRE"></p>
+    </div>
+
+    <script>
+        function calculateFIRE() {
+            let monthlyExpense = parseFloat(document.getElementById("monthlyExpense").value) || 0;
+            let currentAge = parseInt(document.getElementById("currentAge").value) || 0;
+            let retirementAge = parseInt(document.getElementById("retirementAge").value) || 0;
+            let inflationRate = parseFloat(document.getElementById("inflationRate").value) / 100;
+            let coastFireAge = parseInt(document.getElementById("coastFireAge").value) || 0;
+            
+            let annualExpense = monthlyExpense * 12;
+            let yearsToRetirement = retirementAge - currentAge;
+            let yearsToCoastFire = coastFireAge - currentAge;
+            
+            let expenseAtRetirement = annualExpense * Math.pow(1 + inflationRate, yearsToRetirement);
+            let leanFIRE = expenseAtRetirement * 15;
+            let fire = expenseAtRetirement * 25;
+            let fatFIRE = expenseAtRetirement * 50;
+            
+            let coastFIRE = fire / Math.pow(1 + inflationRate, yearsToRetirement - yearsToCoastFire);
+            
+            document.getElementById("expenseToday").innerHTML = `Expense Today: <b>₹${annualExpense.toLocaleString('en-IN')}</b>`;
+            document.getElementById("expenseAtRetirement").innerHTML = `Expense at ${retirementAge}: <b>₹${expenseAtRetirement.toLocaleString('en-IN')}</b>`;
+            document.getElementById("leanFIRE").innerHTML = `Lean FIRE: <b>₹${leanFIRE.toLocaleString('en-IN')}</b>`;
+            document.getElementById("fire").innerHTML = `FIRE: <b>₹${fire.toLocaleString('en-IN')}</b>`;
+            document.getElementById("fatFIRE").innerHTML = `FAT FIRE: <b>₹${fatFIRE.toLocaleString('en-IN')}</b>`;
+            document.getElementById("coastFIRE").innerHTML = `Coast FIRE: <b>₹${coastFIRE.toLocaleString('en-IN')}</b>`;
+        }
+    </script>
+</body>
+</html>
